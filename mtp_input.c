@@ -12,6 +12,9 @@
 
 #define MTP_IRQ  123
 
+#define MTP_NAME "xxxx"
+#define MTP_MAX_ID 1000 /* 由硬件决定 */
+
 struct input_dev *ts_dev;
 static struct work_struct mtp_work;
 
@@ -35,6 +38,12 @@ static void mtp_work_func(struct work_struct *work)
 	/* 读取 */
 
 	/* 上报 */
+	if (/* 没有触点 */) {
+		input_mt_sync(ts_dev);
+		input_sync(ts_dev);
+		return;
+	}
+	
 	for (/* 每一个点 */) {
 	    input_report_abs(ts_dev, ABS_MT_POSITION_X, x);
 	    input_report_abs(ts_dev, ABS_MT_POSITION_Y, y);
@@ -65,9 +74,11 @@ static int __devinit mtp_probe(struct i2c_client *client,
 	set_bit(ABS_MT_POSITION_Y,  ts_dev->absbit);
 
 	/* 2.3 这些事件的范围 */
-	input_set_abs_params(ts_dev, ABS_MT_TRACKING_ID, 0, 10, 0, 0);
+	input_set_abs_params(ts_dev, ABS_MT_TRACKING_ID, 0, MTP_MAX_ID, 0, 0);
 	input_set_abs_params(ts_dev, ABS_MT_POSITION_X, 0, MTP_MAX_X, 0, 0);
 	input_set_abs_params(ts_dev, ABS_MT_POSITION_Y, 0, MTP_MAX_Y, 0, 0);	
+
+	ts_dev->name = MTP_NAME; /* android会根据它找到配置文件 */
 
 	/* 注册 */
 	input_register_device(ts_dev);
