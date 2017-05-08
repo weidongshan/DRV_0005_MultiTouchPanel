@@ -9,7 +9,9 @@ v2: There are some errors in v1
   
 v3:  FT5x06 driver for tiny4412  
   
-v3 usage:  
+v4:  add property in driver, android does not need .idc file again    
+  
+v3,v4 usage:  
 a. remove old driver ft5x06_ts.c  
    modify drivers/input/touchscreen/Makefile:  
 obj-$(CONFIG_TOUCHSCREEN_FT5X0X)                += ft5x06_ts.o  

@@ -164,6 +164,12 @@ static int __devinit mtp_probe(struct i2c_client *client,
 	set_bit(EV_SYN, ts_dev->evbit);
 	set_bit(EV_ABS, ts_dev->evbit);
 
+	/* Android系统根据这项确定触摸板类型, 
+	 * 跟.idc文件中写 "touch.deviceType = touchScreen"效果一样
+	 * 设置了这项后, 就不需要.idc文件了
+	 */
+	set_bit(INPUT_PROP_DIRECT, ts_dev->propbit); 
+
 	/* 2.2 能产生这类事件中的哪些 */
 	set_bit(ABS_MT_TRACKING_ID, ts_dev->absbit);
 	set_bit(ABS_MT_POSITION_X,  ts_dev->absbit);
